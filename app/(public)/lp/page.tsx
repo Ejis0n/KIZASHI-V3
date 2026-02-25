@@ -103,26 +103,16 @@ export default async function LpPage() {
           KIZASHIは、公開されている補助金情報を取得し、業種別に分類したうえで市町村ごとに集約します。締切の近さと需要の密度をスコア化し、今まさに動きが生まれている市町村を算出します。
         </p>
         <p style={{ ...SUBTEXT_STYLE, fontSize: "0.9rem", marginBottom: 4 }}>処理の流れ</p>
-        <div className={styles.flowDiagram}>
-          <div className={styles.flowStep}>
-            <span className={styles.flowBox}>全国の補助金を取得</span>
-            <span className={styles.flowArrow}>→</span>
-          </div>
-          <div className={styles.flowStep}>
-            <span className={styles.flowBox}>業種別に分類</span>
-            <span className={styles.flowArrow}>→</span>
-          </div>
-          <div className={styles.flowStep}>
-            <span className={styles.flowBox}>市町村単位で集約</span>
-            <span className={styles.flowArrow}>→</span>
-          </div>
-          <div className={styles.flowStep}>
-            <span className={styles.flowBox}>締切・需要を加点</span>
-            <span className={styles.flowArrow}>→</span>
-          </div>
-          <div className={styles.flowStep}>
-            <span className={styles.flowBox}>最優先市町村を算出</span>
-          </div>
+        <div className={styles.flowDiagram} role="img" aria-label="全国の補助金を取得から業種別に分類、市町村単位で集約、締切・需要を加点、最優先市町村を算出へ">
+          <span className={styles.flowBox}>全国の補助金を取得</span>
+          <span className={styles.flowArrow} aria-hidden>→</span>
+          <span className={styles.flowBox}>業種別に分類</span>
+          <span className={styles.flowArrow} aria-hidden>→</span>
+          <span className={styles.flowBox}>市町村単位で集約</span>
+          <span className={styles.flowArrow} aria-hidden>→</span>
+          <span className={styles.flowBox}>締切・需要を加点</span>
+          <span className={styles.flowArrow} aria-hidden>→</span>
+          <span className={styles.flowBox}>最優先市町村を算出</span>
         </div>
         <p className={styles.bodyText} style={{ ...SUBTEXT_STYLE, lineHeight: 1.8 }}>
           結果として、「どこに、どのタイプの需要が、いつまでに集中しているか」が一覧で見えるようになります。
@@ -410,6 +400,22 @@ export default async function LpPage() {
           15日無料で開始する
         </Link>
       </section>
+
+      {/* フッター：運営・お問い合わせ（目立たない表示） */}
+      <footer className={styles.siteFooter}>
+        <div className={styles.siteFooterInner}>
+          <p className={styles.siteFooterItem}>
+            {process.env.OPERATOR_NAME ?? "Office T2"}
+            {" · "}
+            <a
+              href={`mailto:${process.env.CONTACT_EMAIL ?? "contact@kizashi.officet2.jp"}`}
+              className={styles.siteFooterLink}
+            >
+              {process.env.CONTACT_EMAIL ?? "contact@kizashi.officet2.jp"}
+            </a>
+          </p>
+        </div>
+      </footer>
     </main>
   );
 }

@@ -57,13 +57,17 @@ nano .env.local   # または vi
 | 項目 | 値 |
 |------|-----|
 | APP_URL | `https://kizashi.officet2.jp` |
+| **AUTH_URL** | `https://kizashi.officet2.jp`（**必須**。無いとメール内ログインリンクが localhost になる） |
 | AUTH_SECRET | `openssl rand -base64 32` で生成した本番用 |
 | DATABASE_URL | 本番 Postgres 接続文字列 |
 | STRIPE_SECRET_KEY | 本番 `sk_live_...` |
 | STRIPE_WEBHOOK_SECRET | 後で Step 5 で設定 |
 | STRIPE_PRICE_ID_BETA | 9,800円/月の本番 Price ID |
+| EMAIL_SERVER_HOST / USER / PASSWORD / EMAIL_FROM | ログインURLメール送信用（ConoHa 等） |
 | SMTP_* / MAIL_FROM | 日次メール用 |
 | ADMIN_ALERT_EMAIL | 任意 |
+| OPERATOR_NAME | 任意。LPフッターの「運営」表示（例: 株式会社〇〇） |
+| CONTACT_EMAIL | 任意。LPフッターのお問い合わせメールアドレス |
 | ALLOW_DEMO_PREFS | **未設定** または `false` |
 
 ---
@@ -172,6 +176,17 @@ crontab -e
 30 5 * * * cd /var/www/kizashi && npx dotenv -e .env.local -- npx tsx scripts/compute_priority_municipality.ts >> /var/log/kizashi/compute_priority.log 2>&1
 0 7 * * * cd /var/www/kizashi && npx dotenv -e .env.local -- npx tsx scripts/send_daily_digest.ts >> /var/log/kizashi/daily_digest.log 2>&1
 ```
+
+**データ更新の頻度（cron 設定時）:**
+
+| ジョブ | 頻度 | 内容 |
+|--------|------|------|
+| collect_sources | 12時間ごと（0:00, 12:00） | 補助金ソース一覧の取得 |
+| collect_subsidy_details | 1日2回（6:00, 18:00） | 補助金詳細の取得 |
+| classify_subsidies | 1日2回（6:30, 18:30） | 業種別分類 |
+| compute_municipality_scores | 1日1回（3:00） | 市町村スコア算出 |
+| compute_priority_municipality | 1日1回（5:30） | 最優先市町村算出 |
+| send_daily_digest | 1日1回（7:00） | 日次ダイジェストメール送信 |
 
 ---
 

@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
+import type { Metadata } from "next";
 import styles from "./login.module.css";
+
+export const metadata: Metadata = {
+  title: "ログイン｜KIZASHI",
+  description: "KIZASHIにログイン。メールアドレスでログイン用URLを受け取れます。",
+};
 
 export default async function LoginPage({
   searchParams,

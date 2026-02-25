@@ -4,8 +4,14 @@ import { auth, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { getAllPrefs } from "@/lib/prefs";
 import { ALLOW_DEMO_PREFS } from "@/lib/demo_prefs";
+import type { Metadata } from "next";
 import { AppDashboardContent } from "./AppDashboardContent";
 import { SetHomePrefForm } from "./SetHomePrefForm";
+
+export const metadata: Metadata = {
+  title: "ダッシュボード｜KIZASHI",
+  description: "KIZASHI 補助金レーダー・契約県の補助金一覧",
+};
 
 export default async function AppDashboardPage({
   searchParams,
