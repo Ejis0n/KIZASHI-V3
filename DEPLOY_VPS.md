@@ -17,18 +17,36 @@ ssh -p 10022 root@163.44.99.98
 ## 前提
 
 - [ ] Ubuntu 22.04 等（sudo あり）
-- [ ] Node.js 20 以上（`nvm use` または `node -v` で確認）
 - [ ] ドメイン `kizashi.officet2.jp` の A レコードが VPS の IP を向いている
 - [ ] PostgreSQL（Neon 等）の本番接続文字列を用意済み
+
+---
+
+## Step 0: Node.js と git のインストール（未導入の場合のみ）
+
+VPS に `node` / `npm` がないときは先に以下を実行する。
+
+```bash
+# Node.js 20（LTS）を NodeSource で導入
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 確認
+node -v   # v20.x.x
+npm -v
+
+# git が無ければ
+sudo apt-get install -y git
+```
 
 ---
 
 ## Step 1: リポジトリ取得と環境変数
 
 ```bash
-cd /var/www
 sudo mkdir -p /var/www && sudo chown $USER /var/www
-git clone <このリポジトリのURL> kizashi
+cd /var/www
+git clone https://github.com/Ejis0n/KIZASHI-V3.git kizashi
 cd kizashi
 cp .env.example .env.local
 nano .env.local   # または vi
@@ -85,12 +103,15 @@ pm2 startup   # 表示されたコマンドをそのまま実行
 sudo nano /etc/nginx/sites-available/kizashi
 ```
 
-以下を貼り付けて保存:
+以下を貼り付けて保存（Next.js のみ・3000番。upstream/8080/FastAPI 用 location は不要）:
 
 ```nginx
 server {
     listen 80;
     server_name kizashi.officet2.jp;
+
+    client_max_body_size 1m;
+
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
