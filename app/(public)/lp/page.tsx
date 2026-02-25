@@ -23,6 +23,22 @@ export default async function LpPage() {
 
   return (
     <main style={{ background: "#000", minHeight: "100vh", color: "#fff" }}>
+      {/* グローバルヘッダー：トップ・ログイン（スマホでも常に表示） */}
+      <header className={styles.globalHeader}>
+        <div className={styles.globalHeaderInner}>
+          <Link href="/lp" className={styles.globalHeaderLogo}>
+            KIZASHI
+          </Link>
+          <nav className={styles.globalHeaderNav}>
+            <Link href="/lp" className={styles.globalHeaderLink}>トップ</Link>
+            <Link href="/login" className={styles.globalHeaderLink}>ログイン</Link>
+            {session?.user && (
+              <Link href="/app" className={styles.globalHeaderLinkCta}>ダッシュボード</Link>
+            )}
+          </nav>
+        </div>
+      </header>
+
       {/* SECTION 01｜CONCEPT（Hero） */}
       <section
         className={styles.heroGrid}
