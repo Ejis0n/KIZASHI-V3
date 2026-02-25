@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import { sendVerificationRequest } from "@/lib/auth-send-request";
 import { authAdapter } from "@/lib/auth-adapter";
+import { prisma } from "@/lib/prisma";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: authAdapter,

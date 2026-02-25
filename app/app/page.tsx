@@ -58,7 +58,7 @@ export default async function AppDashboardPage({
           ? ent.accessPrefCodes.map((c: string) => ({ code: c, name: prefs.find((p) => p.code === c)?.name ?? c }))
           : ALLOW_DEMO_PREFS
             ? prefs.map((p) => ({ code: p.code, name: p.name }))
-            : [{ code: homePrefCode, name: homePrefName ?? homePrefCode }]);
+            : homePrefCode ? [{ code: homePrefCode, name: homePrefName ?? homePrefCode }] : []);
 
   if (!homePrefCode) {
     return (
@@ -93,7 +93,7 @@ export default async function AppDashboardPage({
         homePrefName={homePrefName ?? homePrefCode}
         prefOptions={prefOptionsForDashboard}
         isAdmin={isAdmin}
-        ent={ent}
+        ent={ent ? { status: ent.status, trialEndAt: ent.trialEndAt?.toISOString() ?? null } : null}
         canStartCheckout={canStartCheckout}
         canCancel={canCancel}
         signOutAction={async () => {

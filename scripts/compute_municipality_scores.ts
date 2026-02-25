@@ -80,7 +80,7 @@ async function main() {
 
   const now = new Date();
   let upserted = 0;
-  for (const [k, a] of agg) {
+  for (const [k, a] of Array.from(agg)) {
     const parts = k.split(SEP);
     const prefCode = parts[0];
     const municipalityName = parts[1];
