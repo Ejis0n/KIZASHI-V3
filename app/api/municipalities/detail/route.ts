@@ -101,9 +101,9 @@ export async function GET(request: Request) {
           status: s.status === "upcoming" ? "upcoming" : "active",
           deadlineDate: s.deadline ? new Date(s.deadline) : null,
           endDate: null,
-          sourceUrl: s.url,
+          sourceUrl: s.url ?? "",
           summary: null,
-        })) as Row[];
+        }));
       } catch {
         /* ignore */
       }
