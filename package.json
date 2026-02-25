@@ -1,0 +1,55 @@
+{
+  "name": "kizashi",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3002",
+    "dev:3003": "next dev -p 3003",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
+    "db:push": "dotenv -e .env.local -- prisma db push",
+    "db:migrate:deploy": "dotenv -e .env.local -- prisma migrate deploy",
+    "seed:sources": "dotenv -e .env.local -- npx tsx scripts/seed-sources.ts",
+    "collect:sources": "dotenv -e .env.local -- npx tsx scripts/collect_sources.ts",
+    "collect:subsidy-details": "dotenv -e .env.local -- npx tsx scripts/collect_subsidy_details.ts",
+    "classify:subsidies": "dotenv -e .env.local -- npx tsx scripts/classify_subsidies.ts",
+    "compute:municipality-scores": "dotenv -e .env.local -- npx tsx scripts/compute_municipality_scores.ts",
+    "compute:priority": "dotenv -e .env.local -- npx tsx scripts/compute_priority_municipality.ts",
+    "send:daily-digest": "dotenv -e .env.local -- npx tsx scripts/send_daily_digest.ts",
+    "seed:radar-demo": "dotenv -e .env.local -- npx tsx scripts/seed_radar_demo_data.ts",
+    "data:full-run": "sh scripts/run_production_pipeline.sh",
+    "deploy:vps": "sh scripts/deploy-vps.sh"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^2.7.2",
+    "@prisma/client": "^6.1.0",
+    "@types/nodemailer": "^7.0.10",
+    "next": "14.2.18",
+    "next-auth": "^5.0.0-beta.25",
+    "nodemailer": "^7.0.13",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "stripe": "^17.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.6",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.24",
+    "dotenv-cli": "^7.4.2",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.18",
+    "postcss": "^8.5.6",
+    "prettier": "^3.4.2",
+    "prisma": "^6.1.0",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

@@ -1,0 +1,241 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Auth.js Prisma Adapter 用
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          String    @default("user") // "user" | "admin"
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts         Account[]
+  sessions        Session[]
+  entitlement     Entitlement?
+  stripeLink      StripeLink?
+  emailDigestLogs EmailDigestLog[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// KIZASHI 用: ユーザー1人に1エンタイトルメント
+model Entitlement {
+  id              String    @id @default(cuid())
+  userId          String    @unique
+  homePrefCode    String?
+  accessPrefCodes String[]  @default([]) // trial=home+近県4、paid=homeのみ、inactive/canceled=[]
+  status          String    @default("inactive") // "inactive" | "trialing" | "active" | "canceled"
+  trialEndAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Stripe 顧客・サブスク紐付け（1ユーザー1件）
+model StripeLink {
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  customerId         String?
+  subscriptionId     String?
+  priceId            String?
+  subscriptionStatus String?   // trialing | active | canceled 等
+  currentPeriodEnd   DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Webhook 冪等化用
+model WebhookEvent {
+  eventId     String    @id
+  type        String
+  processedAt DateTime?
+  status      String    // "ok" | "error"
+  error       String?
+}
+
+// PROMPT 04: 全国ソースレジストリ＋収集ジョブ
+model SourceRegistry {
+  id                   String   @id @default(cuid())
+  sourceType           String   // "subsidy" | "tender" | "budget" | "other"
+  prefCode             String   // 01..47
+  name                 String
+  url                  String   @db.Text
+  enabled              Boolean  @default(true)
+  fetchIntervalMinutes Int      @default(720) // 例: 720=12h
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  runs  SourceFetchRun[]
+  items SourceFetchItem[]
+
+  @@unique([prefCode, sourceType])
+  @@map("sources_registry")
+}
+
+model SourceFetchRun {
+  id          String    @id @default(cuid())
+  sourceId    String
+  startedAt   DateTime  @default(now())
+  finishedAt  DateTime?
+  status      String    // "success" | "failed"
+  httpStatus  Int?
+  itemCount   Int?
+  bytes       Int?
+  error       String?   @db.Text
+  rawPath     String?   @db.Text
+  contentType String?
+
+  source SourceRegistry @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@map("source_fetch_runs")
+}
+
+model SourceFetchItem {
+  id            String    @id @default(cuid())
+  sourceId      String
+  discoveredAt  DateTime  @default(now())
+  title         String?   @db.Text
+  url           String    @db.Text
+  fingerprint   String    @unique // 重複排除用
+  status        String    @default("new") // "new" | "seen" | "fetched" | "failed"
+  lastFetchedAt DateTime?
+  lastError     String?   @db.Text
+
+  source SourceRegistry @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@map("source_fetch_items")
+}
+
+// PROMPT 05: 補助金詳細（ルールベース抽出）
+model SubsidyItem {
+  id                String    @id @default(cuid())
+  prefCode          String
+  municipalityName  String?
+  title             String    @db.Text
+  sourceUrl         String    @unique @db.Text
+  summary           String?   @db.Text
+  startDate         DateTime? @db.Date
+  endDate           DateTime? @db.Date
+  deadlineDate      DateTime? @db.Date
+  status            String    // "upcoming" | "active" | "expired" | "unknown"
+  category          String?   // PROMPT 07: DEMOLITION | VACANT_HOUSE | ESTATE_CLEARING | ELDERLY_REFORM | SEISMIC | ENERGY | BUSINESS_SUPPORT | OTHER
+  lastCrawledAt     DateTime  @default(now())
+  rawPath           String?   @db.Text
+  parseConfidence   Int       @default(0) // 0-100
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@map("subsidy_items")
+}
+
+// PROMPT 06/07: 市町村スコア（業者向けTOP5用）。category='ALL'=全体、DEMOLITION/...=タイプ別。
+model MunicipalityScore {
+  id                    String    @id @default(cuid())
+  prefCode              String
+  municipalityName      String
+  category              String    @default("ALL") // "ALL"=全体、DEMOLITION/VACANT_HOUSE/...=タイプ別
+  activeCount           Int       @default(0)
+  upcomingCount         Int       @default(0)
+  nearestDeadlineDate   DateTime? @db.Date
+  nearestDeadlineDays   Int?
+  score                 Int       @default(0)
+  computedAt            DateTime  @default(now())
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([prefCode, municipalityName, category])
+  @@map("municipality_scores")
+}
+
+model MunicipalityBrief {
+  id               String   @id @default(cuid())
+  prefCode         String
+  municipalityName String
+  category         String   @default("ALL") // "ALL"=全体、値あり=タイプ別
+  briefText        String   @db.Text
+  topSubsidiesJson String   @db.Text // JSON: [{ title, url, deadline, status }]
+  computedAt       DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([prefCode, municipalityName, category])
+  @@map("municipality_briefs")
+}
+
+// PROMPT 09: 日次ダイジェスト送信ログ（二重送信防止）
+model EmailDigestLog {
+  id          String    @id @default(cuid())
+  userId      String
+  prefCode    String
+  digestDate  DateTime  @db.Date // YYYY-MM-DD
+  status      String    // "sent" | "failed" | "skipped"
+  error       String?   @db.Text
+  sentAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, digestDate])
+  @@map("email_digest_logs")
+}
+
+// PROMPT 10: 県ごと最優先1市町村（本日動くべき場所）
+model PriorityMunicipality {
+  id               String   @id @default(cuid())
+  prefCode         String   @unique
+  municipalityName String
+  score            Int      @default(0)
+  reasonJson       String   @db.Text // { active, upcoming, deadline7, deadline3, categoryBoost }
+  computedAt       DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("priority_municipalities")
+}
