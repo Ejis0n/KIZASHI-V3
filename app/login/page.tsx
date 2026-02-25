@@ -27,22 +27,35 @@ export default async function LoginPage({
       {isVerificationError ? (
         <p style={{ color: "#c00", marginBottom: "1rem", fontSize: "0.95rem" }}>
           このリンクは既に使用済みか無効です。<br />
-          下のフォームでメールアドレスを入力し、「ログイン用URLを送信」を押して、<strong>新しいURL</strong>をターミナルに表示させてから、そのURLを<strong>1回だけ</strong>開いてください。
+          下のフォームでメールアドレスを入力し、「ログイン用URLを送信」を押して、届いたメールの<strong>新しいリンク</strong>を<strong>1回だけ</strong>開いてください。
+          {process.env.NODE_ENV !== "production" && (
+            <> 開発時はターミナルに表示されたURLを開いてください。</>
+          )}
         </p>
       ) : hasError ? (
         <p style={{ color: "#c00", marginBottom: "1rem", fontSize: "0.95rem" }}>
           ログインに失敗しました。もう一度「ログイン用URLを送信」からやり直してください。
         </p>
       ) : null}
-      <p style={{ fontSize: "0.9rem", color: "#555", marginBottom: "1rem" }}>
-        <strong>開発時:</strong> メールは送信されません。<br />
-        「ログイン用URLを送信」を押したあと、<strong>npm run dev を実行しているターミナル</strong>に表示される URL をブラウザで開いてください。
-      </p>
+      {process.env.NODE_ENV !== "production" ? (
+        <p style={{ fontSize: "0.9rem", color: "#555", marginBottom: "1rem" }}>
+          <strong>開発時:</strong> メールは送信されません。<br />
+          「ログイン用URLを送信」を押したあと、<strong>npm run dev を実行しているターミナル</strong>に表示される URL をブラウザで開いてください。
+        </p>
+      ) : (
+        <p style={{ fontSize: "0.9rem", color: "#555", marginBottom: "1rem" }}>
+          メールアドレスにログイン用URLを送信します。届いたメールのリンクからログインしてください。
+        </p>
+      )}
       {sent && !isVerificationError ? (
         <p style={{ color: "green", marginBottom: "1rem" }}>
           ログイン用のURLをメールで送信しました。届いたリンクをクリックしてください。
-          <br />
-          （開発時はターミナルに表示されたURLをブラウザで開いてください）
+          {process.env.NODE_ENV !== "production" && (
+            <>
+              <br />
+              （開発時はターミナルに表示されたURLをブラウザで開いてください）
+            </>
+          )}
         </p>
       ) : null}
       <form
