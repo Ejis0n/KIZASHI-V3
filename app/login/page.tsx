@@ -31,7 +31,7 @@ export default async function LoginPage({
     <main className={styles.wrapper}>
       <div className={styles.inner}>
         <p className={styles.header}>
-          <Link href="/lp" className={styles.headerLink}>← トップへ</Link>
+          <Link href="/" className={styles.headerLink}>← トップへ</Link>
         </p>
         <h1 className={styles.title}>ログイン</h1>
         {isVerificationError ? (
@@ -95,7 +95,7 @@ export default async function LoginPage({
           </label>
           <button type="submit" className={styles.submit}>ログイン用URLを送信</button>
         </form>
-        <Link href="/lp" className={styles.backLink}>トップへ戻る</Link>
+        <Link href="/" className={styles.backLink}>トップへ戻る</Link>
       </div>
     </main>
   );

@@ -22,7 +22,7 @@ export default function NotFound() {
         お探しのURLは存在しないか、移動した可能性があります。
       </p>
       <Link
-        href="/lp"
+        href="/"
         style={{
           display: "inline-block",
           padding: "14px 28px",

@@ -1,5 +1,13 @@
-import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import type { Metadata } from "next";
+import { LpContent } from "@/app/(public)/lp/LpContent";
 
-export default function Home() {
-  redirect("/lp");
+export const metadata: Metadata = {
+  title: "KIZASHI｜補助金解析による市町村優先度可視化サービス",
+  description: "全国補助金を解析し、今日営業すべき市町村を可視化する。",
+};
+
+export default async function Home() {
+  const session = await auth();
+  return <LpContent session={session} topUrl="/" />;
 }

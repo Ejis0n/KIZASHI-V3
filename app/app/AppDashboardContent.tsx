@@ -90,7 +90,7 @@ export function AppDashboardContent({
         )}
 
         <div className="flex items-center justify-between pt-4 text-sm">
-          <Link href="/lp" className="text-[#6b7c8f] hover:text-[#00d4aa]">
+          <Link href="/" className="text-[#6b7c8f] hover:text-[#00d4aa]">
             トップへ
           </Link>
           <form action={signOutAction} className="inline">
