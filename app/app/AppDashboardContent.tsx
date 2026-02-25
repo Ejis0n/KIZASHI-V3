@@ -83,8 +83,8 @@ export function AppDashboardContent({
         </section>
 
         {!isAdmin && (
-          <section className="rounded-lg border border-[#1e2a3a] bg-[#0d1220]/80 p-4 mb-4">
-            <h2 className="text-xs tracking-widest text-[#6b7c8f] uppercase mb-2">請求</h2>
+          <section className="rounded-lg border border-[#00d4aa]/30 bg-[#0d1220] p-4 mb-4">
+            <h2 className="text-sm font-semibold text-[#c8d4e0] mb-3">請求</h2>
             <AppBillingActions canStartCheckout={canStartCheckout} canCancel={canCancel} />
           </section>
         )}

@@ -32,14 +32,22 @@ export function AppBillingActions({ canStartCheckout, canCancel }: Props) {
   }
 
   return (
-    <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+    <div className="flex flex-wrap items-center gap-3">
       {canStartCheckout && (
-        <button type="button" onClick={handleStartCheckout}>
+        <button
+          type="button"
+          onClick={handleStartCheckout}
+          className="px-4 py-2.5 rounded-lg bg-[#00d4aa] text-[#0a0e17] font-semibold text-sm hover:opacity-90 transition-opacity min-h-[44px]"
+        >
           無料15日で開始
         </button>
       )}
       {canCancel && (
-        <button type="button" onClick={handleCancel} style={{ marginLeft: "0.5rem" }}>
+        <button
+          type="button"
+          onClick={handleCancel}
+          className="px-4 py-2.5 rounded-lg border border-[#3a4a5a] text-[#c8d4e0] text-sm hover:bg-[#1e2a3a] hover:border-[#4a5a6a] transition-colors min-h-[44px]"
+        >
           解約（即停止）
         </button>
       )}

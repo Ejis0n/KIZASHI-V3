@@ -367,7 +367,7 @@ export default async function LpPage() {
         </p>
       </section>
 
-      {/* SECTION 07｜PRICING */}
+      {/* SECTION 07｜PRICING（無料・有料の差＋料金） */}
       <section style={SECTION_STYLE}>
         <span className={styles.sectionLabel}>PRICING</span>
         <h2
@@ -379,12 +379,30 @@ export default async function LpPage() {
         >
           Beta Plan
         </h2>
-        <p style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: 12 }}>
-          9,800円 / 月 / 県
+        <p className={styles.bodyText} style={{ ...SUBTEXT_STYLE, marginBottom: 16 }}>
+          15日無料トライアル後、9,800円/月/県。解約即停止。
         </p>
-        <p className={styles.bodyText} style={{ ...SUBTEXT_STYLE, marginBottom: 24 }}>
-          15日無料。解約即停止。営業判断を構造化するための費用です。
-        </p>
+
+        <div className={styles.priceCompare}>
+          <div className={styles.priceCompareCol}>
+            <div className={styles.priceCompareLabel}>無料トライアル（15日間）</div>
+            <ul className={styles.priceCompareList}>
+              <li>ホーム県 ＋ 近隣4県まで閲覧</li>
+              <li>毎朝の日次メール</li>
+              <li>レーダー・優先度・補助金一覧</li>
+            </ul>
+          </div>
+          <div className={styles.priceCompareCol}>
+            <div className={styles.priceCompareLabel}>有料（9,800円/月/県）</div>
+            <ul className={styles.priceCompareList}>
+              <li>契約した1県のみ閲覧</li>
+              <li>毎朝の日次メール</li>
+              <li>レーダー・優先度・補助金一覧</li>
+              <li>解約すると即時停止</li>
+            </ul>
+          </div>
+        </div>
+
         <Link
           href={ctaHref}
           style={{
@@ -395,6 +413,7 @@ export default async function LpPage() {
             fontWeight: 600,
             textDecoration: "none",
             borderRadius: 4,
+            marginTop: 8,
           }}
         >
           15日無料で開始する
