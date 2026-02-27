@@ -94,23 +94,23 @@ export function MunicipalityDetailClient({ pref, prefName, municipalityName, ini
     }
   };
 
-  if (err) return <p style={{ color: "#c00" }}>{err}</p>;
-  if (!data) return <p style={{ color: "#888" }}>読み込み中...</p>;
+  if (err) return <p style={{ color: "#f88" }}>{err}</p>;
+  if (!data) return <p style={{ color: "#8b9cad" }}>読み込み中...</p>;
 
   const filtered = data.items.filter((i) => i.status === tab);
   const deadlineStr = (i: Item) =>
     i.deadlineDate ?? i.endDate ?? "—";
 
   return (
-    <section>
-      <h1>{data.municipality}</h1>
-      <p style={{ marginBottom: "0.5rem" }}>
+    <section style={{ color: "#e8e8e8" }}>
+      <h1 style={{ color: "#fff" }}>{data.municipality}</h1>
+      <p style={{ marginBottom: "0.5rem", color: "#c8d4e0" }}>
         <label>
           タイプ:{" "}
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            style={{ padding: "0.3rem" }}
+            style={{ padding: "0.3rem", background: "#1e2a3a", color: "#e8e8e8", border: "1px solid #333" }}
           >
             {TOP_CATEGORY_OPTIONS.map((c) => (
               <option key={c} value={c}>
@@ -121,41 +121,41 @@ export function MunicipalityDetailClient({ pref, prefName, municipalityName, ini
         </label>
       </p>
 
-      <section style={{ marginBottom: "1.5rem", padding: "1rem", border: "1px solid #444", borderRadius: 8 }}>
-        <h2 style={{ marginTop: 0, fontSize: "1.1rem" }}>営業テンプレ（コピペ用）</h2>
-        <p style={{ fontSize: "0.85rem", color: "#888", marginBottom: "0.75rem" }}>
+      <section style={{ marginBottom: "1.5rem", padding: "1rem", border: "1px solid #444", borderRadius: 8, background: "#0d1220" }}>
+        <h2 style={{ marginTop: 0, fontSize: "1.1rem", color: "#fff" }}>営業テンプレ（コピペ用）</h2>
+        <p style={{ fontSize: "0.85rem", color: "#8b9cad", marginBottom: "0.75rem" }}>
           業者がそのままコピーしてSMS・メール等に使える文面です。タイプを変えると文面が切り替わります。
         </p>
         <div style={{ marginBottom: "1rem" }}>
-          <p style={{ marginBottom: "0.25rem", fontWeight: "bold", fontSize: "0.9rem" }}>ショート（SMS・DM用）</p>
-          <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-all", padding: "0.75rem", background: "#1a1a1a", borderRadius: 4, fontSize: "0.85rem", margin: "0 0 0.5rem 0", maxHeight: 160, overflow: "auto" }}>
+          <p style={{ marginBottom: "0.25rem", fontWeight: "bold", fontSize: "0.9rem", color: "#c8d4e0" }}>ショート（SMS・DM用）</p>
+          <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-all", padding: "0.75rem", background: "#1a1a1a", color: "#e8e8e8", borderRadius: 4, fontSize: "0.85rem", margin: "0 0 0.5rem 0", maxHeight: 160, overflow: "auto" }}>
             {messageShort}
           </pre>
           <button
             type="button"
             onClick={() => handleCopy(messageShort, "short")}
-            style={{ padding: "0.35rem 0.75rem", fontSize: "0.9rem" }}
+            style={{ padding: "0.35rem 0.75rem", fontSize: "0.9rem", background: "#1e2a3a", color: "#e8e8e8", border: "1px solid #444", borderRadius: 4 }}
           >
             コピー
           </button>
           {copyFeedback === "short" && <span style={{ marginLeft: "0.5rem", fontSize: "0.85rem", color: "#6a6" }}>コピーしました</span>}
         </div>
         <div>
-          <p style={{ marginBottom: "0.25rem", fontWeight: "bold", fontSize: "0.9rem" }}>ロング（メール・提案用）</p>
-          <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-all", padding: "0.75rem", background: "#1a1a1a", borderRadius: 4, fontSize: "0.85rem", margin: "0 0 0.5rem 0", maxHeight: 280, overflow: "auto" }}>
+          <p style={{ marginBottom: "0.25rem", fontWeight: "bold", fontSize: "0.9rem", color: "#c8d4e0" }}>ロング（メール・提案用）</p>
+          <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-all", padding: "0.75rem", background: "#1a1a1a", color: "#e8e8e8", borderRadius: 4, fontSize: "0.85rem", margin: "0 0 0.5rem 0", maxHeight: 280, overflow: "auto" }}>
             {messageLong}
           </pre>
           <button
             type="button"
             onClick={() => handleCopy(messageLong, "long")}
-            style={{ padding: "0.35rem 0.75rem", fontSize: "0.9rem" }}
+            style={{ padding: "0.35rem 0.75rem", fontSize: "0.9rem", background: "#1e2a3a", color: "#e8e8e8", border: "1px solid #444", borderRadius: 4 }}
           >
             コピー
           </button>
           {copyFeedback === "long" && <span style={{ marginLeft: "0.5rem", fontSize: "0.85rem", color: "#6a6" }}>コピーしました</span>}
         </div>
         {topSubsidies.length > 0 && (
-          <p style={{ fontSize: "0.85rem", color: "#888", marginTop: "0.75rem", marginBottom: 0 }}>
+          <p style={{ fontSize: "0.85rem", color: "#8b9cad", marginTop: "0.75rem", marginBottom: 0 }}>
             代表補助金（最大3件）: {topSubsidies.map((s) => s.title).join(" / ")}。下の一覧からリンク・期限を確認できます。
           </p>
         )}
@@ -171,6 +171,7 @@ export function MunicipalityDetailClient({ pref, prefName, municipalityName, ini
             border: "1px solid #666",
             borderRadius: 4,
             background: tab === "active" ? "#333" : "transparent",
+            color: "#e8e8e8",
           }}
         >
           募集中 ({data.items.filter((i) => i.status === "active").length})
@@ -184,13 +185,14 @@ export function MunicipalityDetailClient({ pref, prefName, municipalityName, ini
             border: "1px solid #666",
             borderRadius: 4,
             background: tab === "upcoming" ? "#333" : "transparent",
+            color: "#e8e8e8",
           }}
         >
           これから ({data.items.filter((i) => i.status === "upcoming").length})
         </button>
       </div>
       {filtered.length === 0 ? (
-        <p style={{ color: "#888" }}>該当する補助金はありません。</p>
+        <p style={{ color: "#8b9cad" }}>該当する補助金はありません。</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
           {filtered.map((i, idx) => (
@@ -201,20 +203,20 @@ export function MunicipalityDetailClient({ pref, prefName, municipalityName, ini
                 padding: "0.75rem 0",
               }}
             >
-              <div style={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
+              <div style={{ fontWeight: "bold", marginBottom: "0.25rem", color: "#e8e8e8" }}>
                 {i.sourceUrl ? (
-                  <a href={i.sourceUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={i.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#00d4aa" }}>
                     {i.title}
                   </a>
                 ) : (
                   i.title
                 )}
               </div>
-              <div style={{ fontSize: "0.9rem", color: "#888" }}>
+              <div style={{ fontSize: "0.9rem", color: "#8b9cad" }}>
                 期限: {deadlineStr(i)}
               </div>
               {i.summary && (
-                <div style={{ fontSize: "0.9rem", marginTop: "0.25rem" }}>{i.summary}</div>
+                <div style={{ fontSize: "0.9rem", marginTop: "0.25rem", color: "#c8d4e0" }}>{i.summary}</div>
               )}
             </li>
           ))}

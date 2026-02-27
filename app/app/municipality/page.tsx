@@ -23,9 +23,9 @@ export default async function MunicipalityPage({
   const prefName = getPrefByCode(pref)?.name ?? pref;
 
   return (
-    <main style={{ padding: "1rem", maxWidth: 900 }}>
+    <main style={{ padding: "1rem", maxWidth: 900, background: "#0d1220", color: "#e8e8e8", minHeight: "100vh" }}>
       <p>
-        <Link href="/app">← ダッシュボード</Link>
+        <Link href="/app" style={{ color: "#00d4aa" }}>← ダッシュボード</Link>
       </p>
       <MunicipalityDetailClient
         pref={pref}
