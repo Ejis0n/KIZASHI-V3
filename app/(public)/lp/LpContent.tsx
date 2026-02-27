@@ -413,10 +413,10 @@ export function LpContent({ session, topUrl = "/" }: Props) {
             {process.env.OPERATOR_NAME ?? "Office T2"}
             {" · "}
             <a
-              href={`mailto:${process.env.CONTACT_EMAIL ?? "contact@kizashi.officet2.jp"}`}
+              href={`mailto:${process.env.CONTACT_EMAIL ?? "kizashi-contact@officet2.jp"}`}
               className={styles.siteFooterLink}
             >
-              {process.env.CONTACT_EMAIL ?? "contact@kizashi.officet2.jp"}
+              {process.env.CONTACT_EMAIL ?? "kizashi-contact@officet2.jp"}
             </a>
           </p>
         </div>

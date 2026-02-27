@@ -67,7 +67,7 @@ nano .env.local   # または vi
 | SMTP_* / MAIL_FROM | 日次メール用 |
 | ADMIN_ALERT_EMAIL | 任意 |
 | OPERATOR_NAME | 任意。LPフッターの「運営」表示（例: 株式会社〇〇） |
-| CONTACT_EMAIL | 任意。LPフッターのお問い合わせメールアドレス |
+| CONTACT_EMAIL | LPフッターのお問い合わせメール（例: `kizashi-contact@officet2.jp`） |
 | ALLOW_DEMO_PREFS | **未設定** または `false` |
 
 ---
