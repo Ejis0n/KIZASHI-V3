@@ -19,6 +19,7 @@
     "compute:municipality-scores": "dotenv -e .env.local -- npx tsx scripts/compute_municipality_scores.ts",
     "compute:priority": "dotenv -e .env.local -- npx tsx scripts/compute_priority_municipality.ts",
     "send:daily-digest": "dotenv -e .env.local -- npx tsx scripts/send_daily_digest.ts",
+    "check:usage": "dotenv -e .env.local -- npx tsx scripts/check_usage.ts",
     "seed:radar-demo": "dotenv -e .env.local -- npx tsx scripts/seed_radar_demo_data.ts",
     "data:full-run": "sh scripts/run_production_pipeline.sh",
     "deploy:vps": "sh scripts/deploy-vps.sh"
